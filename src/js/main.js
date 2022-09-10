@@ -58,7 +58,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (t <= 0) {
             days = 0;
             hours = 0;
-            minutes = 0
+            minutes = 0;
             seconds = 0;
         } else {
             days = Math.floor(t / (1000 * 60 * 60 * 24));
@@ -102,7 +102,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // Расчет времеи, оставшегося на эту секунду
             const t = getTimeRemaining(endtime);
             // помещаем расчетные величины на страницу 
-            days.innerHTML = getZero(t.days)
+            days.innerHTML = getZero(t.days);
             hours.innerHTML = getZero(t.hours);
             minutes.innerHTML = getZero(t.minutes);
             seconds.innerHTML = getZero(t.seconds);
@@ -114,4 +114,48 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     setClock('.timer', deadline);
 
+   // Modal
+    const modal = document.querySelector('.modal');
+    const modalCloseBtn = document.querySelector('.modal__close');
+    const modalOpenBtns = document.querySelectorAll('[data-modal-open]');
+
+    function closeModal() {
+        modal.classList.toggle('show');
+        document.body.style.overflow = '';
+    }
+
+    function openModal() {
+        modal.classList.toggle('show');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId);
+        window.removeEventListener('scroll', openModalByScroll);
+    }
+
+
+    modalOpenBtns.forEach(btn => {
+        btn.addEventListener('click', openModal);
+    });
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    const modalTimerId = setTimeout(openModal, 5000);
+
+    function openModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openModal();
+        }
+    }
+
+    window.addEventListener('scroll', openModalByScroll);
 });

@@ -321,6 +321,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const indicators = document.createElement('ol');
     const dots = [];
 
+    function deleteNotDigits(str) {
+        return +str.replace(/\D/g, '');
+    }
+
     function updateCurrentSlideNum() {
         current.textContent = getZero(currentSlideIndex + 1);
     }
@@ -364,10 +368,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     nextSlideBtn.addEventListener('click', () => {
-        if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+        if (offset == deleteNotDigits(width) * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += +width.slice(0, width.length - 2);
+            offset += deleteNotDigits(width);
         }
         showSlide();
 
@@ -383,9 +387,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     prevSlideBtn.addEventListener('click', () => {
         if (offset == 0) {
-            offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+            offset = deleteNotDigits(width) * (slides.length - 1);
         } else {
-            offset -= +width.slice(0, width.length - 2);
+            offset -= deleteNotDigits(width)
         }
         showSlide();
 
@@ -404,7 +408,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const slideTo = event.target.getAttribute('data-slide-to');
 
             currentSlideIndex = slideTo - 1;
-            offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+            offset = deleteNotDigits(width) * (slideTo - 1);
 
             showSlide();
             updateCurrentSlideNum();
